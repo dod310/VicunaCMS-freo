@@ -1,22 +1,19 @@
 # VicunaCMS-freo
 
-Vicuna CMSのWordPress専用のテーマwp.Vicunaを、高機能CMS freo向けにカスタマイズしたものを公開しています。
+[Vicuna CMS](http://vicuna.jp)のWordPress専用のテーマwp.Vicunaを、高機能CMS [freo](http://freo.jp)向けにカスタマイズしたものを公開しています。
 
 ## ライセンス
 
 freoとwp.Vicunaのライセンスに順じます。
 
-> freoのライセンス
+### freoのライセンス
 > 配布しているプログラムは、個人・法人を問わず、自由に利用・複製・改変・再配布することができます。
 > 各フッター部分に表示している著作権表記は、削除したければ削除可能です。
 > プログラム内の著作権表示とライセンスの文章は削除できません。
 > 再配布の際に対価を要求することもできますが、再配布物にはGPLを適用しなければなりません。
 > <http://freo.jp/about/license.html>
 
-
-
-
-> wp.Vicunaライセンス
+### wp.Vicunaライセンス
 > 利用するCMSのライセンスがコピーレフトである場合はCMSのライセンスに従い、そうでない場合はMITライセンスとして配布します。
 > 個人・商用問わず利用が可能です。ビジネスサイトの構築や、wp.Vicunaを使用して第三者から有償でWEBサイトの構築を請け負うことができます。このライセンスはvicuna.jpで配布しているスキンにも適用されます。
 > <http://wp.vicuna.jp/about/what/>
