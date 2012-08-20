@@ -15,6 +15,7 @@ freoとwp.Vicunaのライセンスに順じます。
 
 
 
+
 > wp.Vicunaライセンス
 > 利用するCMSのライセンスがコピーレフトである場合はCMSのライセンスに従い、そうでない場合はMITライセンスとして配布します。
 > 個人・商用問わず利用が可能です。ビジネスサイトの構築や、wp.Vicunaを使用して第三者から有償でWEBサイトの構築を請け負うことができます。このライセンスはvicuna.jpで配布しているスキンにも適用されます。
@@ -28,9 +29,9 @@ freoとwp.Vicunaのライセンスに順じます。
 
 スキンを変更する場合は、templates/internals/header.htmlの16行目
 
-    {assign var='select_css' value='style-future'}
+    {assign var='select_css' value='**style-future**'}
 
-のstyle-futureの部分を変更します。以下の5つを指定する事が出来ます。
+の**style-future**の部分を変更します。以下の5つを指定する事が出来ます。
 
 * style-vega
 * style-mono
@@ -61,9 +62,9 @@ freoとwp.Vicunaのライセンスに順じます。
 
 デフォルトではページはシングルカラムにしてありますが、シングル以外にする場合は、
 
-    {if $smarty.request.freo.mode == 'page'}single 
+    {if $smarty.request.freo.mode == 'page'}**single** 
 
-のsingleの部分をdoubleなどに変更します。
+の**single**の部分を**double**などに変更します。
 
 また
 
