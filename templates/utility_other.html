@@ -1,0 +1,70 @@
+	<div id="utilities">
+		<dl class="navi">
+			<dt>About</dt>
+				<dd>
+					<p>Text Text Text</p>
+				</dd>
+		</dl>
+		<dl class="others">
+			<dt>Search</dt>
+				<dd>
+					<form action="{$freo.core.http_file}/entry" method="get">
+						<fieldset>
+							<legend><label for="searchKeyword">Search</label></legend>
+							<div>
+								<input type="text" class="inputField" id="searchKeyword" name="word" size="50" onfocus="if (this.value == 'Keyword(s)') this.value = '';" onblur="if (this.value == '') this.value = 'Keyword(s)';" value="{if $smarty.get.word}{$smarty.get.word}{else}Keyword(s){/if}" />
+								<input type="submit" class="submit" id="submit" value="Search" />
+							</div>
+						</fieldset>
+					</form>
+				</dd>
+			<dt>Feeds</dt>
+				<dd>
+					<ul class="feed">
+						<li><a href="{$freo.core.http_file}/feed">RSS1.0</a></li>
+						<li><a href="{$freo.core.http_file}/feed/rss2">RSS2.0</a></li>
+					</ul>
+				</dd>
+			<dt>Pages</dt>
+				<dd>
+					<ul>
+						<li><a href="{$freo.core.http_file}/page/">ページ一覧</a></li>
+						<!--{foreach from=$plugin_page_menus|smarty:nodefaults item='plugin_page_menu'}-->
+						<li><a href="{$freo.core.http_file}/page/{$plugin_page_menu.id}">{$plugin_page_menu.title}</a></li>
+						<!--{foreachelse}-->
+						<li>ページが登録されていません。</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+
+
+			<dt>Links</dt>
+				<dd>
+					<ul>
+						<!--{if !$freo.user.authority and $freo.config.user.regist}-->
+						<li><a href="{$freo.core.http_file}/regist">ユーザー登録</a></li>
+						<!--{/if}-->
+						<!--{if $freo.user.authority == 'root' or $freo.user.authority == 'author'}-->
+						<li><a href="{$freo.core.http_file}/admin">管理者用ページ</a></li>
+						<!--{elseif $freo.user.authority == 'guest'}-->
+						<li><a href="{$freo.core.http_file}/admin">ユーザー用ページ</a></li>
+						<!--{else}-->
+						<li><a href="{$freo.core.http_file}/reissue">パスワード再発行</a></li>
+						<!--{/if}-->
+						<!--{if $freo.user.authority != 'root' and $freo.user.authority != 'author' and ($freo.config.entry.filter or $freo.config.page.filter)}-->
+						<li><a href="{$freo.core.http_file}/filter">フィルター設定</a></li>
+						<!--{/if}-->
+					</ul>
+				</dd>
+			<dt>User</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$freo.refer.users|smarty:nodefaults item='refer_user'}-->
+						<!--{if $refer_user.authority == 'root' or $refer_user.authority == 'author'}-->
+						<li><a href="{$freo.core.http_file}/profile/{$refer_user.id}">{$refer_user.name}</a></li>
+						<!--{/if}-->
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+		</dl>
+	</div>

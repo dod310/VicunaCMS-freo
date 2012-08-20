@@ -1,0 +1,133 @@
+{include file='header.html'}
+	<div id="main">
+		<p class="topicPath">
+			<a href="{$freo.core.http_file}">Home</a>
+			<!--{if $smarty.get.word}-->&gt; <span class="current">{$smarty.get.word}</span><!--{/if}-->
+			<!--{if $smarty.get.user}-->&gt; <span class="current">{$smarty.get.user}</span><!--{/if}-->
+			<!--{if $smarty.get.tag}-->&gt; <span class="current">{$smarty.get.tag}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 4}-->&gt; <span class="current">{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 6}-->&gt; <span class="current">{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 8}-->&gt; <span class="current">{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}</span><!--{/if}-->
+			<!--{if $smarty.get.category}-->&gt; <span class="current">{$freo.refer.categories[$smarty.get.category].name}</span><!--{/if}-->
+		</p>
+		<h1>
+			<!--{if $smarty.get.word}-->{$smarty.get.word}
+			<!--{elseif $smarty.get.user}-->{$smarty.get.user}
+			<!--{elseif $smarty.get.tag}-->{$smarty.get.tag}
+			<!--{elseif $smarty.get.date|count_characters == 4}-->{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}
+			<!--{elseif $smarty.get.date|count_characters == 6}-->{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}
+			<!--{elseif $smarty.get.date|count_characters == 8}-->{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}
+			<!--{elseif $smarty.get.category}-->{$freo.refer.categories[$smarty.get.category].name}
+			<!--{else}-->
+			{$freo.config.basis.title} - {$freo.config.basis.description}
+			<!--{/if}-->
+		</h1>
+		<!--{foreach from=$entries|smarty:nodefaults item='entry'}-->
+		<div class="section entry" id="entry{$entry.id}">
+			<h2><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a></h2>
+			<ul class="info">
+				<li class="date">{$entry.datetime|date_format:'%Y/%m/%d %H:%M'}</li>
+				<!--{if $entry_associates[$entry.id].category}-->
+				<li class="category"><!--{foreach from=$entry_associates[$entry.id].category|smarty:nodefaults key='entry_category' item='entry_category' name='loop'}--><a href="{$freo.core.http_file}/category/{$entry_category}">{$freo.refer.categories[$entry_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+				<!--{/if}-->
+				<!--{if $entry_tags[$entry.id]}-->
+				<li class="tagcloud"><!--{foreach from=$entry_tags[$entry.id]|smarty:nodefaults item='entry_tag' name='loop'}--><a href="{$freo.core.http_file}/entry?tag={$entry_tag|smarty:nodefaults|escape:'url'}">{$entry_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+				<!--{/if}-->
+				<!--{if $freo.user.authority == 'root' or $freo.user.id == $entry.user_id}-->
+				<li><a href="{$freo.core.http_file}/admin/entry_form?id={$entry.id}" rel="nofollow">Edit</a></li>
+				<!--{/if}-->
+			</ul>
+			<div class="textBody">
+				<!--{if $entry.restriction == 'user' and !$entry_securities[$entry.id]}-->
+				<ul class="attention"><li>このエントリーは、登録ユーザーのみに公開されています。</li></ul>
+				<!--{elseif $entry.restriction == 'group' and !$entry_securities[$entry.id]}-->
+				<ul class="attention"><li>このエントリーは、一部のグループのみに公開されています。</li></ul>
+				<!--{elseif $entry.restriction == 'password' and !$entry_securities[$entry.id]}-->
+				<ul class="attention"><li>このエントリーは、パスワードで認証した人のみに公開されています。</li></ul>
+				<!--{/if}-->
+				<!--{if $entry.file and $entry.image}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_images/{$entry.id}/{$entry.image}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_images[$entry.id].width}" height="{$entry_images[$entry.id].height}" /></a></p>
+				<!--{elseif $entry_thumbnails[$entry.id]}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_thumbnails/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_thumbnails[$entry.id].width}" height="{$entry_thumbnails[$entry.id].height}" /></a></p>
+				<!--{elseif $entry.file and $entry_files[$entry.id].width and $entry_files[$entry.id].height}-->
+				<p class="attachment"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_files[$entry.id].width}" height="{$entry_files[$entry.id].height}" /></p>
+				<!--{elseif $entry.file}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}">{$entry.memo|default:$entry.file}</a></p>
+				<!--{/if}-->
+				<!--{if $entry_texts[$entry.id].excerpt}-->
+				{$entry_texts[$entry.id].excerpt|smarty:nodefaults}
+				<!--{/if}-->
+				<!--{if $entry_texts[$entry.id].more}-->
+				<p class="continue"><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}?continue=1#extended" title="No.{$entry.id}の続き" rel="nofollow">Continue Reading</a></p>
+				<!--{/if}-->
+			</div>
+			<!--{if $entry.restriction == 'password' and !$smarty.session.security.entry[$entry.id] and $freo.user.authority != 'root' and $freo.user.authority != 'author'}-->
+			<div class="textBody well" id="restriction">
+				<span class="section-title">記事認証</span>
+				<form action="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}" method="post">
+					<fieldset>
+						<legend>認証フォーム</legend>
+						<input type="text" name="entry[password]" size="30" value="" />
+						<input type="submit" class="submit" value="認証する" />
+					</fieldset>
+				</form>
+			</div>
+			<!--{/if}-->
+			<!--{if $entry_associates[$entry.id].option}-->
+			<div class="textBody well" id="option">
+				<span class="section-title">オプション</span>
+				<dl>
+				<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+				<!--{if $entry_associates[$entry.id].option[$option.id] != ''}-->
+				<dt>{$option.name}</dt>
+					<dd><!--{if $option.type == 'file'}--><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_options/{$entry.id}/{$option.id}/{$entry_associates[$entry.id].option[$option.id]}">{$entry_associates[$entry.id].option[$option.id]}</a><!--{else}-->{$entry_associates[$entry.id].option[$option.id]|nl2br}<!--{/if}--></dd>
+					<!--{/if}-->
+					<!--{/foreach}-->
+				</dl>
+			</div>
+			<!--{/if}-->
+			<ul class="reaction">
+				<!--{if $entry.comment != 'closed'}-->
+				<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#comments" title="No.{$entry.id}のコメント" rel="nofollow">Comment</a>: <span class="count">{$plugin_comment_counts[$entry.id]}</span></li>
+				<!--{/if}-->
+				<!--{if $entry.trackback != 'closed'}-->
+				<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#trackback" title="No.{$entry.id}のトラックバック" rel="nofollow">Trackback</a>: <span class="count">{$plugin_trackback_counts[$entry.id]}</span></li>
+				<!--{/if}-->
+			</ul>
+		</div>
+		<!--{/foreach}-->
+		<!--{if $freo.query.page > 1 || $entry_page > $freo.query.page}-->
+		<ul class="flip pager" id="flip2">
+			<!--{if $freo.query.page > 1}-->
+			<li class="newer">
+				<a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">Newer Entries</a>
+			</li>
+			<!--{/if}-->
+			<!--{if $entry_page > $freo.query.page}-->
+			<li class="older">
+				<a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">Older Entries</a>
+			</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<!--{if $smarty.get.word or $smarty.get.user or $smarty.get.tag or $smarty.get.date or $smarty.get.category}-->
+		<ul class="direct">
+			<li>Page:</li>
+			<!--{section name='loop' loop=$entry_page}-->
+			<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$smarty.section.loop.iteration}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+			<!--{/section}-->
+		</ul>
+		<!--{/if}-->
+		<p class="topicPath" id="path2">
+			<a href="{$freo.core.http_file}">Home</a>
+			<!--{if $smarty.get.word}-->&gt; <span class="current">{$smarty.get.word}</span><!--{/if}-->
+			<!--{if $smarty.get.user}-->&gt; <span class="current">{$smarty.get.user}</span><!--{/if}-->
+			<!--{if $smarty.get.tag}-->&gt; <span class="current">{$smarty.get.tag}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 4}-->&gt; <span class="current">{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 6}-->&gt; <span class="current">{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}</span><!--{/if}-->
+			<!--{if $smarty.get.date|count_characters == 8}-->&gt; <span class="current">{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}</span><!--{/if}-->
+			<!--{if $smarty.get.category}-->&gt; <span class="current">{$freo.refer.categories[$smarty.get.category].name}</span><!--{/if}-->
+		</p>
+	</div>
+{include file='utility.html'}
+{include file='footer.html'}

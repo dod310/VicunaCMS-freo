@@ -1,0 +1,201 @@
+	<div id="utilities">
+		<dl class="navi">
+			<dt>About</dt>
+				<dd>
+					<p>Text Text Text</p>
+				</dd>
+		{if $smarty.request.freo.mode == 'page'}
+		{* ページ *}
+			<dt>ページ検索</dt>
+				<dd>
+					<form action="{$freo.core.http_file}/page" method="get">
+						<fieldset>
+							<legend><label for="pageSearchKeyword">Search</label></legend>
+							<div>
+								<input type="text" class="inputField" id="pageSearchKeyword" name="word" size="50" onfocus="if (this.value == 'Keyword(s)') this.value = '';" onblur="if (this.value == '') this.value = 'Keyword(s)';" value="{if $smarty.get.word}{$smarty.get.word}{else}Keyword(s){/if}" />
+								<input type="submit" class="submit" id="submit" value="Search" />
+							</div>
+						</fieldset>
+					</form>
+				</dd>
+			<!--{if $plugin_page_childs|smarty:nodefaults}-->
+			<dt>目次</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_page_childs|smarty:nodefaults item='plugin_page_child'}-->
+						<li><a href="{$freo.core.http_file}/page/{$plugin_page_child.id}" rel="nofollow">{$plugin_page_child.title}</a></li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{/if}-->
+		{* ページここまで *}
+		{else}
+		{* ブログ *}
+			<dt>Calendar</dt>
+				<dd>
+					<table class="calendar" cellpadding="0" cellspacing="0" summary="Monthly calendar">
+						<caption>
+							<a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender_next}" title="Newer" rel="nofollow">&laquo;</a>
+							{$plugin_entry_calender_year}年{$plugin_entry_calender_month}月
+							<a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender_previous}" title="Older" rel="nofollow">&raquo;</a>
+						</caption>
+						<tr>
+							<th class="sun" title="Sunday">S</th>
+							<th title="Monday">M</th>
+							<th title="Tuesday">T</th>
+							<th title="Wednesday">W</th>
+							<th title="Thursday">T</th>
+							<th title="Friday">F</th>
+							<th class="sat" title="Saturday">S</th>
+						</tr>
+						<!--{foreach from=$plugin_entry_calenders|smarty:nodefaults item='plugin_entry_calender' name='loop'}-->
+						<!--{if $smarty.foreach.loop.index % 7 == 0}-->
+						<tr>
+						<!--{/if}-->
+						<!--{if $plugin_entry_calender.type == 'day'}-->
+							<td><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="day">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+						<!--{elseif $plugin_entry_calender.type == 'satday'}-->
+							<td><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="satday">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+						<!--{elseif $plugin_entry_calender.type == 'sunday'}-->
+							<td><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="sunday">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+						<!--{else}-->
+							<td>-</td>
+						<!--{/if}-->
+						<!--{if $smarty.foreach.loop.index % 7 == 6}-->
+						</tr>
+						<!--{/if}-->
+						<!--{/foreach}-->
+					</table>
+				</dd>
+			<!--{if $plugin_entry_recentries|smarty:nodefaults}-->
+			<dt>Recent Entries</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_entry_recentries|smarty:nodefaults item='plugin_entry_recently'}-->
+						<li><a href="{$freo.core.http_file}/view/{if $plugin_entry_recently.code}{$plugin_entry_recently.code}{else}{$plugin_entry_recently.id}{/if}" title="{$plugin_entry_recently.datetime|date_format:'%Y/%m/%d %H:%M'}">{$plugin_entry_recently.title}</a></dt>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{/if}-->
+			<dt>Tag Cloud</dt>
+				<dd>
+					<ul class="tagCloud">
+						<!--{foreach from=$plugin_entry_tagclouds|smarty:nodefaults item='plugin_entry_tagcloud'}-->
+						<li class="level{$plugin_entry_tagcloud.size}"><a href="{$freo.core.http_file}/entry?tag={$plugin_entry_tagcloud.tag|smarty:nodefaults|escape:'url'}" title="{$plugin_entry_tagcloud.count}">{$plugin_entry_tagcloud.tag}</a></li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<dt>Categories</dt>
+				<dd>
+					{include file='utility_category.html'}
+				</dd>
+			<dt>Archives</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_entry_archives|smarty:nodefaults item='plugin_entry_archive'}-->
+						<li><a href="{$freo.core.http_file}/entry?date={$plugin_entry_archive.year}{$plugin_entry_archive.month}">{$plugin_entry_archive.year}年{$plugin_entry_archive.month}月</a>({$plugin_entry_archive.count})</li>
+						<!--{foreachelse}-->
+						<li>エントリーが登録されていません。</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{if $plugin_comment_recentries|smarty:nodefaults}-->
+			<dt>Recent Comments</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_comment_recentries|smarty:nodefaults item='plugin_comment_recently'}-->
+						<li><a href="{$freo.core.http_file}/{if $plugin_comment_recently.entry_id}view/{$plugin_comment_recently.entry_id}{elseif $plugin_comment_recently.page_id}page/{$plugin_comment_recently.page_id}{/if}">Re: <!--{if $plugin_comment_recently.entry_id}-->{$plugin_comment_recently_entries[$plugin_comment_recently.entry_id].title}<!--{elseif $plugin_comment_recently.page_id}-->{$plugin_comment_recently_pages[$plugin_comment_recently.page_id].title}<!--{/if}--></a>
+							<ul>
+								<li>{$plugin_comment_recently.created|date_format:'%Y/%m/%d'}
+								from
+								<!--{if $plugin_comment_recently.user_id}-->{$freo.refer.users[$plugin_comment_recently.user_id].name}<!--{else}-->{$plugin_comment_recently.name}<!--{/if}-->
+								</li>
+							</ul>
+						</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{/if}-->
+			<!--{if $plugin_trackback_recentries|smarty:nodefaults}-->
+			<dt>Recent Trackbacks</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_trackback_recentries|smarty:nodefaults item='plugin_trackback_recently'}-->
+						<li><a href="{$freo.core.http_file}/{if $plugin_trackback_recently.entry_id}view/{$plugin_trackback_recently.entry_id}{elseif $plugin_trackback_recently.page_id}page/{$plugin_trackback_recently.page_id}{/if}">Re: <!--{if $plugin_trackback_recently.entry_id}-->{$plugin_trackback_recently_entries[$plugin_trackback_recently.entry_id].title}<!--{elseif $plugin_trackback_recently.page_id}-->{$plugin_trackback_recently_pages[$plugin_trackback_recently.page_id].title}<!--{/if}--></a>
+							<ul>
+								<li>{$plugin_trackback_recently.created|date_format:'%Y/%m/%d'}
+								from
+								{$plugin_trackback_recently.name}
+								</li>
+							</ul>
+						</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{/if}-->
+		{* ブログここまで *}
+		{/if}
+		</dl>
+		<dl class="others">
+			<dt>Search</dt>
+				<dd>
+					<form action="{$freo.core.http_file}/entry" method="get">
+						<fieldset>
+							<legend><label for="searchKeyword">Search</label></legend>
+							<div>
+								<input type="text" class="inputField" id="searchKeyword" name="word" size="50" onfocus="if (this.value == 'Keyword(s)') this.value = '';" onblur="if (this.value == '') this.value = 'Keyword(s)';" value="{if $smarty.get.word}{$smarty.get.word}{else}Keyword(s){/if}" />
+								<input type="submit" class="submit" id="submit" value="Search" />
+							</div>
+						</fieldset>
+					</form>
+				</dd>
+			<dt>Feeds</dt>
+				<dd>
+					<ul class="feed">
+						<li><a href="{$freo.core.http_file}/feed">RSS1.0</a></li>
+						<li><a href="{$freo.core.http_file}/feed/rss2">RSS2.0</a></li>
+					</ul>
+				</dd>
+			<dt>Pages</dt>
+				<dd>
+					<ul>
+						<li><a href="{$freo.core.http_file}/page/">ページ一覧</a></li>
+						<!--{foreach from=$plugin_page_menus|smarty:nodefaults item='plugin_page_menu'}-->
+						<li><a href="{$freo.core.http_file}/page/{$plugin_page_menu.id}">{$plugin_page_menu.title}</a></li>
+						<!--{foreachelse}-->
+						<li>ページが登録されていません。</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+
+
+			<dt>Links</dt>
+				<dd>
+					<ul>
+						<!--{if !$freo.user.authority and $freo.config.user.regist}-->
+						<li><a href="{$freo.core.http_file}/regist">ユーザー登録</a></li>
+						<!--{/if}-->
+						<!--{if $freo.user.authority == 'root' or $freo.user.authority == 'author'}-->
+						<li><a href="{$freo.core.http_file}/admin">管理者用ページ</a></li>
+						<!--{elseif $freo.user.authority == 'guest'}-->
+						<li><a href="{$freo.core.http_file}/admin">ユーザー用ページ</a></li>
+						<!--{else}-->
+						<li><a href="{$freo.core.http_file}/reissue">パスワード再発行</a></li>
+						<!--{/if}-->
+						<!--{if $freo.user.authority != 'root' and $freo.user.authority != 'author' and ($freo.config.entry.filter or $freo.config.page.filter)}-->
+						<li><a href="{$freo.core.http_file}/filter">フィルター設定</a></li>
+						<!--{/if}-->
+					</ul>
+				</dd>
+			<dt>User</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$freo.refer.users|smarty:nodefaults item='refer_user'}-->
+						<!--{if $refer_user.authority == 'root' or $refer_user.authority == 'author'}-->
+						<li><a href="{$freo.core.http_file}/profile/{$refer_user.id}">{$refer_user.name}</a></li>
+						<!--{/if}-->
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+		</dl>
+	</div>

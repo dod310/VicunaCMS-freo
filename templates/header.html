@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head profile="http://purl.org/net/ns/metaprof">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{if $entry.title}{$entry.title} | {elseif $page.title}{$page.title} | {/if}{$freo.config.basis.title}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="generator" content="freo" />
+<link rel="alternate" href="{$freo.core.http_file}/feed" type="application/rss+xml" title="RSS" />
+{*
+	[style-vega], [style-mono], [style-galaxy], [style-flat], [style-future]
+	{assign var='select_css' value='ここにスタイル名'}
+	記述は→{$select_css}
+*}
+{assign var='select_css' value='style-future'}
+<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}{$select_css}/import.css" type="text/css" media="all" />
+<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}freo.css" type="text/css" media="all" />
+<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}colorbox.css" type="text/css" media="all" />
+<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.js"></script>
+<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.colorbox.js"></script>
+<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}common.js"></script>
+<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}default.js"></script>
+</head>
+
+<body>
+<body class="{$select_css} {if $smarty.request.freo.mode == 'view'}individual {elseif $smarty.request.freo.mode == 'default' || $smarty.request.freo.mode == 'entry'}mainIndex {/if}{if $smarty.request.freo.mode == 'page'}single {if $smarty.get.id}individual{else}archives{/if}{else}double f900{/if}">
+<div id="header">
+	<p class="siteName"><a href="{$freo.core.http_file}">{$freo.config.basis.title}</a></p>
+	<p class="description">{$freo.config.basis.description}</p>
+	<ul id="globalNavi">
+		<li><a href="{$freo.core.http_file}">トップページ</a></li>
+		<li><a href="{$freo.core.http_file}/information">インフォメーション</a></li>
+		<li><a href="{$freo.core.https_file}/login">ログイン</a></li>
+		<!--{if isset($smarty.session.freo.agent.type|smarty:nodefaults)}-->
+		<li><a href="{$smarty.server.PHP_SELF}?freo%5Bagent%5D%5Btype%5D=iphone">iPhone版</a></li>
+		<!--{/if}-->
+	</ul>
+</div>
+<div id="content">

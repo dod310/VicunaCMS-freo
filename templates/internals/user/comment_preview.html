@@ -1,0 +1,41 @@
+{include file='header.html'}
+	<div id="main">
+		<p class="topicPath"><a href="{$freo.core.http_file}">Home</a> &gt; <span class="current">ユーザー用ページ</span></p>
+		<h1>ユーザー用ページ</h1>
+		<div class="section content textBody">
+			<h2>コメント登録</h2>
+			<ul>
+				<li>以下の内容で登録します。</li>
+			</ul>
+			<dl>
+				<dt>ユーザーID</dt>
+					<dd>{$comment.user_id}</dd>
+				<dt>名前</dt>
+					<dd>{$freo.refer.users[$comment.user_id].name}</dd>
+				<dt>コメント</dt>
+					<dd>{$comment.text|nl2p}</dd>
+				<dt>閲覧制限</dt>
+					<dd><!--{if $comment.restriction == 'user'}-->登録ユーザーに公開<!--{elseif $comment.restriction == 'admin'}-->管理者に公開<!--{else}-->全体に公開<!--{/if}--></dd>
+			</dl>
+			<div class="action preview">
+				<form action="{$freo.core.http_file}/user/comment_form" method="get">
+					<fieldset>
+						<legend>コメント編集フォーム</legend>
+						<input type="hidden" name="session" value="1" />
+						<input type="hidden" name="id" value="{$freo.query.id}" />
+						<input type="submit" value="戻る" class="submit back" />
+					</fieldset>
+				</form>
+				<form action="{$freo.core.http_file}/user/comment_preview?id={$freo.query.id}" method="post">
+					<fieldset>
+						<legend>コメント登録フォーム</legend>
+						<input type="hidden" name="freo[token]" value="{$token}" />
+						<input type="submit" value="登録する" class="submit post" />
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<p class="topicPath"><a href="{$freo.core.http_file}">Home</a> &gt; <span class="current">ユーザー用ページ</span></p>
+	</div>
+{include file='utility_other.html'}
+{include file='footer.html'}

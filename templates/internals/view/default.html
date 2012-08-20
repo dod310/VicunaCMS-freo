@@ -1,0 +1,227 @@
+{include file='header.html'}
+	<div id="main">
+		<p class="topicPath">
+			<a href="{$freo.core.http_file}">Home</a><!--{if $entry_associate.category}--> &gt; <!--{foreach from=$entry_associate.category|smarty:nodefaults key='entry_category' item='entry_category' name='loop'}--> <a href="{$freo.core.http_file}/category/{$entry_category}" title="カテゴリーインデックスへ戻る">{$freo.refer.categories[$entry_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--><!--{/if}--> &gt; <span class="current">{$entry.title}</span>
+		</p>
+		<!--{if $plugin_entry_link_next || $plugin_entry_link_previous}-->
+		<ul class="flip" id="flip1">
+			<!--{if $plugin_entry_link_next}--><li class="newer"><a href="{$freo.core.http_file}/view/{if $plugin_entry_link_next.code}{$plugin_entry_link_next.code}{else}{$plugin_entry_link_next.id}{/if}" title="{$plugin_entry_link_next.title}" rel="nofollow">Newer</a></li><!--{/if}-->
+			<!--{if $plugin_entry_link_previous}--><li class="older"><a href="{$freo.core.http_file}/view/{if $plugin_entry_link_previous.code}{$plugin_entry_link_previous.code}{else}{$plugin_entry_link_previous.id}{/if}" title="{$plugin_entry_link_previous.title}" rel="nofollow">Older</a></li><!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<h1><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a></h1>
+		<div class="section entry" id="entry{$entry.id}">
+			<ul class="info">
+				<li class="date">{$entry.datetime|date_format:'%Y/%m/%d %H:%M'}</li>
+				<!--{if $entry_associate.category}-->
+				<li class="category"><!--{foreach from=$entry_associate.category|smarty:nodefaults key='entry_category' item='entry_category' name='loop'}--><a href="{$freo.core.http_file}/category/{$entry_category}">{$freo.refer.categories[$entry_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+				<!--{/if}-->
+				<!--{if $entry_tags}-->
+				<li class="tagcloud"><!--{foreach from=$entry_tags|smarty:nodefaults item='entry_tag' name='loop'}--><a href="{$freo.core.http_file}/entry?tag={$entry_tag|smarty:nodefaults|escape:'url'}">{$entry_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+				<!--{/if}-->
+				<!--{if $freo.user.authority == 'root' or $freo.user.id == $entry.user_id}-->
+				<li class="edit"><a href="{$freo.core.http_file}/admin/entry_form?id={$entry.id}">Edit</a></li>
+				<!--{/if}-->
+			</ul>
+			<div class="textBody">
+				<!--{if $entry.restriction == 'user' and !$entry_security}-->
+				<ul class="attention"><li>このエントリーは、登録ユーザーのみに公開されています。</li></ul>
+				<!--{elseif $entry.restriction == 'group' and !$entry_security}-->
+				<ul class="attention"><li>このエントリーは、一部のグループのみに公開されています。</li></ul>
+				<!--{elseif $entry.restriction == 'password' and !$entry_security}-->
+				<ul class="attention"><li>このエントリーは、パスワードで認証した人のみに公開されています。</li></ul>
+				<!--{/if}-->
+				<!--{if $entry.file and $entry.image}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_images/{$entry.id}/{$entry.image}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_image.width}" height="{$entry_image.height}" /></a></p>
+				<!--{elseif $entry_thumbnail}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_thumbnails/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_thumbnail.width}" height="{$entry_thumbnail.height}" /></a></p>
+				<!--{elseif $entry.file and $entry_file.width and $entry_file.height}-->
+				<p class="attachment"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_file.width}" height="{$entry_file.height}" /></p>
+				<!--{elseif $entry.file}-->
+				<p class="attachment"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}">{$entry.memo|default:$entry.file}</a></p>
+				<!--{/if}-->
+				<!--{if $entry_text.excerpt}-->
+				{$entry_text.excerpt|smarty:nodefaults}
+				<!--{/if}-->
+				<!--{if $entry_text.more && !$freo.query.continue}-->
+				<p class="continue"><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}?continue=1#extended" title="No.{$entry.id}の続き" rel="nofollow">Continue Raeding</a></p>
+				<!--{/if}-->
+			</div>
+			<!--{if $entry_text.more && $freo.query.continue}-->
+			<div class="textBody" id="extended">
+				{$entry_text.more|smarty:nodefaults}
+			</div>
+			<!--{/if}-->
+			<!--{if $entry.restriction == 'password' and !$smarty.session.security.entry[$entry.id] and $freo.user.authority != 'root' and $freo.user.authority != 'author'}-->
+			<div class="textBody well" id="restriction">
+				<span class="section-title">記事認証</span>
+				<form action="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}" method="post">
+					<fieldset>
+						<legend>認証フォーム</legend>
+						<input type="text" name="entry[password]" size="30" value="" />
+						<input type="submit" class="submit" value="認証する" />
+					</fieldset>
+				</form>
+			</div>
+			<!--{/if}-->
+			<!--{if $entry_associate.option}-->
+			<div class="textBody well" id="option">
+				<span class="section-title">オプション</span>
+				<dl>
+					<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+					<!--{if $entry_associate.option[$option.id] != ''}-->
+					<dt>{$option.name}</dt>
+						<dd><!--{if $option.type == 'file'}--><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_options/{$entry.id}/{$option.id}/{$entry_associate.option[$option.id]}">{$entry_associate.option[$option.id]}</a><!--{else}-->{$entry_associate.option[$option.id]|nl2br}<!--{/if}--></dd>
+					<!--{/if}-->
+					<!--{/foreach}-->
+				</dl>
+			</div>
+			<!--{/if}-->
+
+			<!--{if $entry.comment != 'closed' || $entry.trackback != 'closed'}-->
+			<ul class="reaction">
+				<!--{if $entry.comment != 'closed'}-->
+				<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#comments" title="No.{$entry.id}のコメント" rel="nofollow">Comment</a>: <span class="count">{$comments|smarty:nodefaults|@count}</span></li>
+				<!--{/if}-->
+				<!--{if $entry.trackback != 'closed'}-->
+				<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#trackback" title="No.{$entry.id}のトラックバック" rel="nofollow">Trackback</a>: <span class="count">{$trackbacks|smarty:nodefaults|@count}</span></li>
+				<!--{/if}-->
+			</ul>
+			<!--{/if}-->
+			<!--{if $plugin_entry_link_next || $plugin_entry_link_previous}-->
+			<ul class="flip" id="flip2">
+				<!--{if $plugin_entry_link_next}-->
+				<li class="newer">Newer: <a href="{$freo.core.http_file}/view/{if $plugin_entry_link_next.code}{$plugin_entry_link_next.code}{else}{$plugin_entry_link_next.id}{/if}" title="1つ新しい記事">{$plugin_entry_link_next.title}</a></li>
+				<!--{/if}-->
+				<!--{if $plugin_entry_link_previous}-->
+				<li class="Older">Older: <a href="{$freo.core.http_file}/view/{if $plugin_entry_link_previous.code}{$plugin_entry_link_previous.code}{else}{$plugin_entry_link_previous.id}{/if}" title="1つ古い記事">{$plugin_entry_link_previous.title}</a></li>
+				<!--{/if}-->
+			</ul>
+			<!--{/if}-->
+
+			<!--{if $entry.comment != 'closed'}-->
+			<div class="section" id="comments">
+				<h2>Comment:<span class="count">{$comments|smarty:nodefaults|@count}</span></h2>
+				<!--{foreach from=$comments|smarty:nodefaults item='comment' name='comment_count'}-->
+				<!--{if $smarty.foreach.comment_count.first}--><dl class="log"><!--{/if}-->
+					<dt id="comment{$smarty.foreach.comment_count.iteration}">
+						<span class="name"><!--{if $comment.url}--><a href="{$comment.url}" title="{$comment.url}"><!--{/if}--><!--{if $comment.user_id}-->{$freo.refer.users[$comment.user_id].name}<!--{else}-->{$comment.name}<!--{/if}--><!--{if $comment.url}--></a><!--{/if}--></span>
+						<span class="date">{$comment.created|date_format:'%Y/%m/%d %H:%M:%S'}</span>
+						<!--{if $freo.user.authority == 'root' or ($freo.user.authority == 'author' and ($freo.user.id == $comment.user_id or $freo.refer.users[$comment.user_id].authority == '' or $freo.refer.users[$comment.user_id].authority == 'guest'))}--><span class="edit"><a href="{$freo.core.http_file}/admin/comment_form?id={$comment.id}">Edit</a></span><!--{elseif $freo.user.authority == 'guest' and $freo.user.id == $comment.user_id}--><span class="edit"><a href="{$freo.core.http_file}/user/comment_form?id={$comment.id}">Edit</a></span><!--{/if}-->
+					</dt>
+						<dd>
+							<!--{if $comment.approved == 'no' and !$comment_securities[$comment.id]}-->
+							<ul class="attention"><li>このコメントは、管理者の承認待ちです。</li></ul>
+							<!--{elseif $comment.restriction == 'user' and !$comment_securities[$comment.id]}-->
+							<ul class="attention"><li>このコメントは、登録ユーザーのみに公開されています。</li></ul>
+							<!--{elseif $comment.restriction == 'admin' and !$comment_securities[$comment.id]}-->
+							<ul class="attention"><li>このコメントは、管理者のみに公開されています。</li></ul>
+							<!--{/if}-->
+							{$comment.text|nl2p|autolink}
+						</dd>
+				<!--{if $smarty.foreach.comment_count.last}--></dl><!--{/if}-->
+				<!--{/foreach}-->
+				<!--{if $entry.comment != 'view'}-->
+				<form action="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#commentsForm" method="post" id="commentsForm" class="post" onsubmit="if (this.bakecookie[0].checked) rememberMe(this)">
+					<fieldset>
+						<legend>Comment Form</legend>
+						<div>
+							<input type="hidden" name="freo[token]" value="{$token}" />
+							<input type="hidden" name="comment[entry_id]" value="{$entry.id}" />
+							<p class="commentModerated">
+								<!--{if $entry.comment == 'open' or $entry.comment == 'user' and $freo.user.id}-->
+								<!--{if $freo.query.error}-->
+								<ul class="attention">
+									<li>不正なアクセスです。</li>
+								</ul>
+								<!--{elseif $errors}-->
+								<ul class="attention">
+									<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+									<li class="attention">{$error}</li>
+									<!--{/foreach}-->
+								</ul>
+								<!--{elseif $freo.query.exec == 'insert'}-->
+								<ul class="complete">
+									<li>コメントを登録しました。</li>
+								</ul>
+								<!--{/if}-->
+								<ul>
+									<li>コメントを入力してください。</li>
+									<!--{if $entry.comment == 'user'}--><li>※ コメントは登録ユーザーからのみ受け付けています。</li><!--{/if}-->
+								</ul>
+							</p>
+						</div>
+						<dl>
+							<!--{if !$freo.user.id}-->
+							<dt><label for="comment-author">Name</label></dt>
+								<dd><input class="inputField" id="comment-author" type="text" name="comment[name]" size="20" value="{$input.comment.name}" /></dd>
+							<dt><label for="comment-email">Mail address</label></dt>
+								<dd><input class="inputField" id="comment-email" type="text" name="comment[mail]" size="20" value="{$input.comment.mail}" /></dd>
+							<dt><label for="comment-url"><abbr title="Uniform Resource Identifer">URI</abbr></label></dt>
+								<dd><input class="inputField" id="comment-url" type="text" name="comment[url]" size="20" value="{$input.comment.url}" /></dd>
+							<!--{/if}-->
+							<!--{if !$freo.user.id}-->
+							<dt>Remember personal info</dt>
+								<dd>
+									<input type="checkbox" name="comment[session]" id="label_session" value="keep"{if $input.comment.session} checked="checked"{/if} /> <label for="label_session">登録者情報を記憶する</label>
+								</dd>
+							<!--{/if}-->
+							<dt><label for="comment-text">Comment</label></dt>
+								<dd><textarea id="comment-text" name="comment[text]" cols="50" rows="8" onfocus="if (this.value == 'Add Your Comment') this.value = '';" onblur="if (this.value == '') this.value = 'Add Your Comment';">{if $input.comment.text}{$input.comment.text}{else}Add Your Comment{/if}</textarea></dd>
+							<dt>Comment Restriction</dt>
+								<dd>
+									<select name="comment[restriction]">
+										<option value="">全体に公開</option>
+										<!--{if $freo.user.id}--><option value="user"{if $input.comment.restriction == 'user'} selected="selected"{/if}>登録ユーザーに公開</option><!--{/if}-->
+										<option value="admin"{if $input.comment.restriction == 'admin'} selected="selected"{/if}>管理者に公開</option>
+									</select>
+								</dd>
+						</dl>
+						<div class="action">
+							<input type="submit" id="comment-preview" name="preview" value="Preview" class="submit preview" />
+							<input type="submit" id="comment-post" value="Post" class="submit post" />
+						</div>
+					</fieldset>
+				</form>
+				<!--{elseif $entry.comment == 'user' and !$freo.user.id}-->
+				<ul class="attention"><li>コメントを登録するには<a href="{$freo.core.https_file}/login">ログイン</a>してください。</li></ul>
+				<!--{/if}-->
+			<!--{/if}-->
+			</div>
+			<!--{/if}-->
+			<!--{if $entry.trackback != 'closed'}-->
+			<div class="section" id="trackback">
+				<h2>Trackback:<span class="count">{$trackbacks|smarty:nodefaults|@count}</span></h2>
+				<!--{if $entry.trackback != 'view'}-->
+				<dl class="info">
+					<dt>TrackBack URL for this entry</dt>
+						<dd class="URL">{$freo.core.http_file}/trackback/{$entry.id}</dd>
+					<dt>Listed below are links to weblogs that reference</dt>
+						<dd><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a> from <a href="{$freo.core.http_file}">{$freo.config.basis.title}</a></dd>
+				</dl>
+				<!--{/if}-->
+				<!--{foreach from=$trackbacks|smarty:nodefaults item='trackback' name='trackback_count'}-->
+				<!--{if $smarty.foreach.trackback_count.first}--><dl class="log"><!--{/if}-->
+					<dt id="trackback{$smarty.foreach.trackback_count.iteration}">
+						<span class="name"><!--{if $trackback.approved == 'no' and $trackback_securities[$trackback.id]}-->{$trackback.name}<!--{else}--><a href="{$trackback.url}">{$trackback.title}</a> from {$trackback.name}<!--{/if}--></span>
+						<span class="date">{$trackback.created|date_format:'%Y/%m/%d %H:%M:%S'}</span>
+						<!--{if $freo.user.authority == 'root' or $freo.user.authority == 'author'}--><span class="edit"><a href="{$freo.core.http_file}/admin/trackback_form?id={$trackback.id}">Edit</a></span><!--{/if}-->
+					</dt>
+						<dd>
+							<!--{if $trackback.approved == 'no' and !$trackback_securities[$trackback.id]}-->
+							<ul class="attention"><li>このトラックバックは、管理者の承認待ちです。</li></ul>
+							<!--{/if}-->
+							{$trackback.text|nl2p|autolink}
+						<dd>
+				<!--{if $smarty.foreach.trackback_count.last}--></dl><!--{/if}-->
+				<!--{/foreach}-->
+			</div>
+			<!--{/if}-->
+		
+		</div>
+		<p class="topicPath" id="path2">
+			<a href="{$freo.core.http_file}">Home</a><!--{if $entry_associate.category}--> &gt; <!--{foreach from=$entry_associate.category|smarty:nodefaults key='entry_category' item='entry_category' name='loop'}--> <a href="{$freo.core.http_file}/category/{$entry_category}" title="カテゴリーインデックスへ戻る">{$freo.refer.categories[$entry_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--><!--{/if}--> &gt; <span class="current">{$entry.title}</span>
+		</p>
+	</div>
+{include file='utility.html'}
+{include file='footer.html'}

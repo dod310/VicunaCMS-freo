@@ -1,0 +1,42 @@
+{include file='header.html'}
+	<div id="main">
+		<p class="topicPath"><a href="{$freo.core.http_file}">Home</a> &gt; <span class="current">ログイン</span></p>
+		<h1>ログイン</h1>
+		<div class="section content textBody">
+			<form action="{$freo.core.https_file}/login" method="post" class="post">
+				<fieldset>
+					<legend>認証フォーム</legend>
+					<div>
+						<p class="commentModerated">
+							<!--{if $errors}-->
+							<ul class="attention">
+								<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+								<li>{$error}</li>
+								<!--{/foreach}-->
+							</ul>
+							<!--{/if}-->
+							<ul>
+								<li>ユーザーIDとパスワードを入力してください。</li>
+								<!--{if $freo.config.user.regist}-->
+								<li><a href="{$freo.core.http_file}/regist">ユーザー登録を行う</a>。</li>
+								<!--{/if}-->
+								<li><a href="{$freo.core.http_file}/reissue">パスワードを再発行する</a>。</li>
+							</ul>
+						</p>
+					</div>
+					<dl>
+						<dt>ユーザーID</dt>
+							<dd><input type="text" name="freo[user]" size="30" value="{$smarty.post.freo.user}" /></dd>
+						<dt>パスワード</dt>
+							<dd><input type="password" name="freo[password]" size="30" value="{$smarty.post.freo.password}" /></dd>
+						<dt>ログイン状態</dt>
+							<dd><input type="checkbox" name="freo[session]" id="label_session" value="keep" /> <label for="label_session">ログイン状態を記憶する</label></dd>
+					</dl>
+					<div class="action"><input type="submit" value="認証する" class="submit post" /></div>
+				</fieldset>
+			</form>
+		</div>
+		<p class="topicPath"><a href="{$freo.core.http_file}">Home</a> &gt; <span class="current">ログイン</span></p>
+	</div>
+{include file='utility_other.html'}
+{include file='footer.html'}
