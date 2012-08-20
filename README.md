@@ -26,7 +26,7 @@ freoとwp.Vicunaのライセンスに順じます。
 
 スキンを変更する場合は、templates/internals/header.htmlの16行目
 
-    {assign var='select_css' value='**style-future**'}
+    {assign var='select_css' value='style-future'}
 
 の**style-future**の部分を変更します。以下の5つを指定する事が出来ます。
 
@@ -59,7 +59,7 @@ freoとwp.Vicunaのライセンスに順じます。
 
 デフォルトではページはシングルカラムにしてありますが、シングル以外にする場合は、
 
-    {if $smarty.request.freo.mode == 'page'}**single** 
+    {if $smarty.request.freo.mode == 'page'}single 
 
 の**single**の部分を**double**などに変更します。
 
