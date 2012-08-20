@@ -14,6 +14,7 @@ freoとwp.Vicunaのライセンスに順じます。
 > <http://freo.jp/about/license.html>
 
 
+
 > wp.Vicunaライセンス
 > 利用するCMSのライセンスがコピーレフトである場合はCMSのライセンスに従い、そうでない場合はMITライセンスとして配布します。
 > 個人・商用問わず利用が可能です。ビジネスサイトの構築や、wp.Vicunaを使用して第三者から有償でWEBサイトの構築を請け負うことができます。このライセンスはvicuna.jpで配布しているスキンにも適用されます。
@@ -53,8 +54,8 @@ freoとwp.Vicunaのライセンスに順じます。
 
 デフォルトでは、この行の最後の方でdouble f900と記入していますが、これにより
 
-double = ダブルカラム(右サイドバー)
-f900 = コンテンツ幅900px
+* double = ダブルカラム(右サイドバー)
+* f900 = コンテンツ幅900px
 
 にレイアウト指定してあります。
 
@@ -79,3 +80,18 @@ f900 = コンテンツ幅900px
 * style-future
 
 bodyのclass名付加部分のソースは使い易い様に改編なさる事をお薦めします。
+
+## サンプル
+
+* freoにVicuna CMSを適用させて実際に動かしている[サンプルページ](http://vc.metal-mad.com)
+
+* [style-vega](http://vc.metal-mad.com/demo/style-vega/preview/index.html)
+* [style-mono](http://vc.metal-mad.com/demo/style-mono/preview/index.html)
+* [style-galaxy](http://vc.metal-mad.com/demo/style-galaxy/preview/index.html)
+* [style-flat](http://vc.metal-mad.com/demo/style-flat/preview/index.html)
+* [style-future](http://vc.metal-mad.com/demo/style-future/preview/index.html)
+
+## 連絡先
+
+* [Website](http://metal-mad.com)
+* [Twitter](https://twitter.com/metalmadcom)
